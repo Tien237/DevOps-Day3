@@ -1,5 +1,4 @@
 name: DevOps Day3 CI/CD
-
 on:
   push:
     branches:
@@ -7,7 +6,6 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   # CI: Build & Test
   ci:
@@ -15,18 +13,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: npm install
-
       - name: Run tests
         run: npm test
-
       # ✅ Thêm cache để tăng tốc cài dependencies
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -35,26 +29,21 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
   # CD: Build & Deploy Docker
   cd:
-    needs: ci   # chỉ chạy khi CI thành công
+    needs: ci # chỉ chạy khi CI thành công
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3
-        
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: jerryng23
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-          
       - name: Build and push Docker image
         id: docker_build
         uses: docker/build-push-action@v5
@@ -66,19 +55,16 @@ jobs:
           tags: |
             jerryng23/devops-day3:latest
             jerryng23/devops-day3:${{ github.sha }}
-            
       - name: Verify
         run: echo "Image digest:" ${{ steps.docker_build.outputs.digest }}
-
       # ✅ Thêm bước check Docker Hub sau khi push
       - name: Inspect pushed image
         run: docker buildx imagetools inspect jerryng23/devops-day3:latest
-
       # ✅ Thêm link để xem kết quả test
-- name: Show test results URL
-  run: |
-    echo "### ✅ CI/CD completed successfully!" >> $GITHUB_STEP_SUMMARY
-    echo "" >> $GITHUB_STEP_SUMMARY
-    echo "**📊 Test Results:**" >> $GITHUB_STEP_SUMMARY
-    echo "- [👉 View Jest Test Report](http://54.79.249.231:3000/test-report.html)" >> $GITHUB_STEP_SUMMARY
-    echo "- [🚀 Open App](http://54.79.249.231:3000)" >> $GITHUB_STEP_SUMMARY
+      - name: Show test results URL
+        run: |
+          echo "### ✅ CI/CD completed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**📊 Test Results:**" >> $GITHUB_STEP_SUMMARY
+          echo "- [👉 View Jest Test Report](http://54.79.249.231:3000/test-report.html)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🚀 Open App](http://54.79.249.231:3000)" >> $GITHUB_STEP_SUMMARY
