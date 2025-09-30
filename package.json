@@ -4,7 +4,8 @@
   "description": "Simple login page with Node.js + Express",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"No test implemented\" && exit 0"
   },
   "dependencies": {
     "express": "^4.19.2",
