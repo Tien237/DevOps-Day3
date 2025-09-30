@@ -27,6 +27,15 @@ jobs:
       - name: Run tests
         run: npm test
 
+      # ✅ Thêm cache để tăng tốc cài dependencies
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
   # CD: Build & Deploy Docker
   cd:
     needs: ci   # chỉ chạy khi CI thành công
@@ -60,3 +69,7 @@ jobs:
             
       - name: Verify
         run: echo "Image digest:" ${{ steps.docker_build.outputs.digest }}
+
+      # ✅ Thêm bước check Docker Hub sau khi push
+      - name: Inspect pushed image
+        run: docker buildx imagetools inspect jerryng23/devops-day3:latest
