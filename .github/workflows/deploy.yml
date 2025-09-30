@@ -74,8 +74,11 @@ jobs:
       - name: Inspect pushed image
         run: docker buildx imagetools inspect jerryng23/devops-day3:latest
 
-      # ✅ Thêm link để test app
-      - name: Show deployed app URL
-        run: |
-          echo "### 🚀 App deployed successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "[👉 Click here to open](http://54.79.249.231:8000)" >> $GITHUB_STEP_SUMMARY
+      # ✅ Thêm link để xem kết quả test
+- name: Show test results URL
+  run: |
+    echo "### ✅ CI/CD completed successfully!" >> $GITHUB_STEP_SUMMARY
+    echo "" >> $GITHUB_STEP_SUMMARY
+    echo "**📊 Test Results:**" >> $GITHUB_STEP_SUMMARY
+    echo "- [👉 View Jest Test Report](http://54.79.249.231:3000/test-report.html)" >> $GITHUB_STEP_SUMMARY
+    echo "- [🚀 Open App](http://54.79.249.231:3000)" >> $GITHUB_STEP_SUMMARY
