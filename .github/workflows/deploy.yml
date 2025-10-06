@@ -53,8 +53,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: |
-            jerryng23/devops-day3:latest
-            jerryng23/devops-day3:${{ github.sha }}
+            tienthuhai/devops-day3:latest
+            tienthuhai/devops-day3:${{ github.sha }}
       - name: Verify
         run: echo "Image digest:" ${{ steps.docker_build.outputs.digest }}
       # ✅ Thêm bước check Docker Hub sau khi push
